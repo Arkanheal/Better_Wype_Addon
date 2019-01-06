@@ -1,0 +1,6 @@
+## Interface: 70300
+## Title: Better Wype
+## Author: Arkanheal, Zeta
+## Version: 0.1a
+
+main.lua

@@ -1,0 +1,5 @@
+local EventFrame = CreateFrame("Frame")
+EventFrame:RegisterEvent("PLAYER_LOGIN")
+EventFrame:SetScript("OnEvent", function(self,event,...)
+	ChatFrame1:AddMessage('Well Hello There '..UnitName("Player"))
+end)
