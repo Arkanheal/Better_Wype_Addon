@@ -2,6 +2,11 @@
 ## Title: Better Wype
 ## Author: Arkanheal, Zeta
 ## Version: 0.1a
+## Notes: Something random atm
+## SavedVariables: BetterWypeDB
+## OptionalDeps: Ace3
+## X-Embeds: Ace3
+
+embeds.xml
 
 main.lua
-BetterWype.xml
