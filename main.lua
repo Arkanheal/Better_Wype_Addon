@@ -17,10 +17,10 @@ local options = {
 }
 
 function BetterWype:OnInitialize()
-	LibStub("AceConfig-3.0":RegisterOptionsTable("BetterWype", options)
+	LibStub("AceConfig-3.0"):RegisterOptionsTable("BetterWype", options)
 	self.optionFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("BetterWype","BetterWype")
-	self:RegisterChatCommand("betterwype", "ChatCommand")
 	self:RegisterChatCommand("bw", "ChatCommand")
+	self:RegisterChatCommand("betterwype", "ChatCommand")
 	BetterWype.message = "Welcome home!"
 end
 
