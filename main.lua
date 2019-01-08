@@ -30,7 +30,16 @@ local options = {
 	},
 }
 
+local defaults = {
+	profile = {
+		message = "Welcome Home!",
+		showInChat = false,
+		showOnScreen = true,
+	},
+}
+
 function BetterWype:OnInitialize()
+	self.db = LibStub("AceDB-3.0"):New("BetterWypeDB", defaults, true)
 	LibStub("AceConfig-3.0"):RegisterOptionsTable("BetterWype", options)
 	self.optionFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("BetterWype","BetterWype")
 	self:RegisterChatCommand("betterwype", "ChatCommand")
@@ -66,38 +75,38 @@ function BetterWype:ZONE_CHANGED_INDOORS()
 	local player_Subloc = GetSubZoneText()
 	player_Subloc = player_Subloc:lower()
 	if HS_loc == player_Subloc then
-		if self.showInChat then
-			self:Print(self.message)
+		if self.db.profile.showInChat then
+			self:Print(self.db.profile.message)
 		end
 		
-		if self.showOnScreen then
-			UIErrorsFrame:AddMessage(self.message, 1.0, 1.0, 5.0)
+		if self.db.profile.showOnScreen then
+			UIErrorsFrame:AddMessage(self.db.profile.message, 1.0, 1.0, 5.0)
 		end
 	end
 end
 
 function BetterWype:GetMessage(info)
-	return self.message
+	return self.db.profile.message
 end
 
 function BetterWype:SetMessage(info, newValue)
-	self.message = newValue
+	self.db.profile.message = newValue
 end
 
 function BetterWype:IsShowInChat(info)
-	return self.showInChat
+	return self.db.profile.showInChat
 end
 
 function BetterWype:ToggleShowInChat(info, value)
-	self.showInChat = value
+	self.db.profile.showInChat = value
 end
 
 function BetterWype:IsShowOnScreen(info)
-	return self.showOnScreen
+	return self.db.profile.showOnScreen
 end
 
 function BetterWype:ToggleShowOnScreen(info, value)
-	self.showOnScreen = value
+	self.db.profile.showOnScreen = value
 end
 
 function BetterWype:ChatCommand(input)
