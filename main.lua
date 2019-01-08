@@ -54,6 +54,12 @@ function BetterWype:OnEnable()
 end
 
 function BetterWype:ZONE_CHANGED()
+	local keylink = BetterWype:GetKeyInfo()
+	if keylink ~= "" then
+		print(keylink)
+	else
+		print("no key atm")
+	end
 	local HS_loc = GetBindLocation()
 	HS_loc = HS_loc:lower()
 	local player_Subloc = GetSubZoneText()
@@ -116,3 +122,18 @@ function BetterWype:ChatCommand(input)
 		LibStub("AceConfigCmd-3.0"):HandleCommand(BetterWype, "betterwype", optionFrame, input)
 	end
 end
+
+--Function got on Re:Keys addon sourcecode (thanks AcidWeb)
+function BetterWype:GetKeyInfo()
+	local keyLink = ""
+	for bag = 0, NUM_BAG_SLOTS do
+		local bagSlots = GetContainerNumSlots(bag)
+		for slot = 1, bagSlots do
+			if GetContainerItemID(bag, slot) == 158923 then
+				keyLink = GetContainerItemLink(bag, slot)
+				break
+			end
+		end
+	end
+	return keyLink
+end	
