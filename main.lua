@@ -13,6 +13,20 @@ local options = {
 			get = "GetMessage",
 			set = "SetMessage",
 		},
+		showInChat = {
+			type = "toggle",
+			name = "Show in Chat",
+			desc = "Toggles the display of the message in the chat window.",
+			get = "IsShowInChat",
+			set = "ToggleShowInChat",
+		},
+		showOnScreen = {
+			type = "toggle",
+			name = "Show on Screen",
+			desc = "Toggles the display of the message in the chat window.",
+			get = "IsShowOnScreen",
+			set = "ToggleShowOnScreen",
+		},
 	},
 }
 
@@ -21,6 +35,8 @@ function BetterWype:OnInitialize()
 	self.optionFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("BetterWype","BetterWype")
 	self:RegisterChatCommand("betterwype", "ChatCommand")
 	BetterWype.message = "Welcome home!"
+	BetterWype.showInChat = false
+	BetterWype.showOnScreen = true
 end
 
 function BetterWype:OnEnable()
@@ -34,7 +50,13 @@ function BetterWype:ZONE_CHANGED()
 	local player_Subloc = GetSubZoneText()
 	player_Subloc = player_Subloc:lower()
 	if HS_loc == player_Subloc then
-		self:Print(self.message)
+		if self.showInChat then
+			self:Print(self.message)
+		end
+		
+		if self.showOnScreen then
+			UIErrorsFrame:AddMessage(self.message, 1.0, 1.0, 5.0)
+		end
 	end
 end
 
@@ -44,7 +66,13 @@ function BetterWype:ZONE_CHANGED_INDOORS()
 	local player_Subloc = GetSubZoneText()
 	player_Subloc = player_Subloc:lower()
 	if HS_loc == player_Subloc then
-		self:Print(self.message)
+		if self.showInChat then
+			self:Print(self.message)
+		end
+		
+		if self.showOnScreen then
+			UIErrorsFrame:AddMessage(self.message, 1.0, 1.0, 5.0)
+		end
 	end
 end
 
@@ -54,6 +82,22 @@ end
 
 function BetterWype:SetMessage(info, newValue)
 	self.message = newValue
+end
+
+function BetterWype:IsShowInChat(info)
+	return self.showInChat
+end
+
+function BetterWype:ToggleShowInChat(info, value)
+	self.showInChat = value
+end
+
+function BetterWype:IsShowOnScreen(info)
+	return self.showOnScreen
+end
+
+function BetterWype:ToggleShowOnScreen(info, value)
+	self.showOnScreen = value
 end
 
 function BetterWype:ChatCommand(input)
