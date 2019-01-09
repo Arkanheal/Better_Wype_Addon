@@ -47,6 +47,11 @@ local options = {
 	},
 }
 
+local classPlate = { 1, 2, 6 }
+local classMail = { 3, 7}
+local classLeather = { 4, 10, 11, 12 }
+local classCloth = { 5, 8, 9}
+
 local defaults = {
 	profile = {
 		message = "No Key atm",
@@ -74,6 +79,11 @@ function BetterWype:OnEnable()
 end
 
 function BetterWype:BAG_UPDATE()
+	local _,_, classIndex = UnitClass("player");
+	if BetterWype:has_in(classLeather, classIndex) then
+		self:Print("You are a leather wearer")
+	end
+	self:Print(classIndex)
 	local keylink = BetterWype:GetKeyInfo()
 	if keylink ~= "" then
 		BetterWype:SetMessage()
@@ -129,6 +139,17 @@ function BetterWype:ChatCommand(input)
 	else
 		LibStub("AceConfigCmd-3.0"):HandleCommand(BetterWype, "betterwype", optionFrame, input)
 	end
+end
+
+--Check if item in list function
+function BetterWype:has_in(tab, val)
+	for i, value in ipairs(tab) do
+		if value == val then
+			return true
+		end
+	end
+	
+	return false
 end
 
 --Function got on Re:Keys addon sourcecode (thanks AcidWeb)
