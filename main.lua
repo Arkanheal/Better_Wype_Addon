@@ -70,17 +70,7 @@ function BetterWype:OnInitialize()
 end
 
 function BetterWype:OnEnable()
-	self:RegisterEvent("ZONE_CHANGED")
 	self:RegisterEvent("BAG_UPDATE")
-end
-
-function BetterWype:ZONE_CHANGED()
-	local keylink = BetterWype:GetKeyInfo()
-	if keylink ~= "" then
-		print(keylink)
-	else
-		print("no key atm")
-	end
 end
 
 function BetterWype:BAG_UPDATE()
