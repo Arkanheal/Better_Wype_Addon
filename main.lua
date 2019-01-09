@@ -80,9 +80,6 @@ end
 
 function BetterWype:BAG_UPDATE()
 	local _,_, classIndex = UnitClass("player");
-	if BetterWype:has_in(classLeather, classIndex) then
-		self:Print("You are a leather wearer")
-	end
 	self:Print(classIndex)
 	local keylink = BetterWype:GetKeyInfo()
 	if keylink ~= "" then
