@@ -7,34 +7,55 @@ local options = {
 	args = {
 		msg = {
 			type = "input",
-			name = "Message",
-			desc = "The message to be displayed",
+			name = "Key"	,
+			desc = "Press a random key and press [OK]",
 			usage = "<Your message>",
 			get = "GetMessage",
 			set = "SetMessage",
 		},
-		showInChat = {
-			type = "toggle",
-			name = "Show in Chat",
-			desc = "Toggles the display of the message in the chat window.",
-			get = "IsShowInChat",
-			set = "ToggleShowInChat",
+		rolegroupe = {
+			type = "group",
+			name = "Roles",
+			args = {
+				tank = {
+					type = "toggle",
+					name = "Tank",
+					get = "IsTank",
+					set = "SetTank",
+				},
+				DPS_cast = {
+					type = "toggle",
+					name = "DPS Cast",
+					get = "IsDPSCast",
+					set = "SetDPSCast",
+				},
+				DPS_melee = {
+					type = "toggle",
+					name = "DPS Melee",
+					get = "IsDPSMelee",
+					set = "SetDPSMelee",
+				},
+				heal = {
+					type = "toggle",
+					name = "Healer",
+					get = "IsHealer",
+					set = "SetHealer",
+				},
+			},
 		},
-		showOnScreen = {
-			type = "toggle",
-			name = "Show on Screen",
-			desc = "Toggles the display of the message in the chat window.",
-			get = "IsShowOnScreen",
-			set = "ToggleShowOnScreen",
-		},
+			
 	},
 }
 
 local defaults = {
 	profile = {
-		message = "Welcome Home!",
+		message = "No Key atm",
 		showInChat = false,
 		showOnScreen = true,
+		tank = false,
+		dpscast = false,
+		dpsmelee = false,
+		healer = false,
 	},
 }
 
@@ -43,14 +64,14 @@ function BetterWype:OnInitialize()
 	LibStub("AceConfig-3.0"):RegisterOptionsTable("BetterWype", options)
 	self.optionFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("BetterWype","BetterWype")
 	self:RegisterChatCommand("betterwype", "ChatCommand")
-	BetterWype.message = "Welcome home!"
+	BetterWype.message = BetterWype:GetKeyInfo()
 	BetterWype.showInChat = false
 	BetterWype.showOnScreen = true
 end
 
 function BetterWype:OnEnable()
 	self:RegisterEvent("ZONE_CHANGED")
-	self:RegisterEvent("ZONE_CHANGED_INDOORS")
+	self:RegisterEvent("BAG_UPDATE")
 end
 
 function BetterWype:ZONE_CHANGED()
@@ -60,59 +81,56 @@ function BetterWype:ZONE_CHANGED()
 	else
 		print("no key atm")
 	end
-	local HS_loc = GetBindLocation()
-	HS_loc = HS_loc:lower()
-	local player_Subloc = GetSubZoneText()
-	player_Subloc = player_Subloc:lower()
-	if HS_loc == player_Subloc then
-		if self.showInChat then
-			self:Print(self.message)
-		end
-		
-		if self.showOnScreen then
-			UIErrorsFrame:AddMessage(self.message, 1.0, 1.0, 5.0)
-		end
+end
+
+function BetterWype:BAG_UPDATE()
+	local keylink = BetterWype:GetKeyInfo()
+	if keylink ~= "" then
+		BetterWype:SetMessage()
+	else
+		self:Print("No Keys found in your bags")
 	end
 end
 
-function BetterWype:ZONE_CHANGED_INDOORS()
-	local HS_loc = GetBindLocation()
-	HS_loc = HS_loc:lower()
-	local player_Subloc = GetSubZoneText()
-	player_Subloc = player_Subloc:lower()
-	if HS_loc == player_Subloc then
-		if self.db.profile.showInChat then
-			self:Print(self.db.profile.message)
-		end
-		
-		if self.db.profile.showOnScreen then
-			UIErrorsFrame:AddMessage(self.db.profile.message, 1.0, 1.0, 5.0)
-		end
-	end
-end
-
+--Getters && Setters
 function BetterWype:GetMessage(info)
 	return self.db.profile.message
 end
 
-function BetterWype:SetMessage(info, newValue)
-	self.db.profile.message = newValue
+function BetterWype:SetMessage(info)
+	self.db.profile.message = BetterWype:GetKeyInfo()
 end
 
-function BetterWype:IsShowInChat(info)
-	return self.db.profile.showInChat
+function BetterWype:IsTank(info)
+	return self.db.profile.tank
 end
 
-function BetterWype:ToggleShowInChat(info, value)
-	self.db.profile.showInChat = value
+function BetterWype:SetTank(info, value)
+	self.db.profile.tank = value
 end
 
-function BetterWype:IsShowOnScreen(info)
-	return self.db.profile.showOnScreen
+function BetterWype:IsDPSCast(info)
+	return self.db.profile.dpscast
 end
 
-function BetterWype:ToggleShowOnScreen(info, value)
-	self.db.profile.showOnScreen = value
+function BetterWype:SetDPSCast(info, value)
+	self.db.profile.dpscast = value
+end
+
+function BetterWype:IsDPSMelee(info)
+	return self.db.profile.dpsmelee
+end
+
+function BetterWype:SetDPSMelee(info,value)
+	self.db.profile.dpsmelee = value
+end
+
+function BetterWype:IsHealer(info)
+	return self.db.profile.healer
+end
+
+function BetterWype:SetHealer(info, value)
+	self.db.profile.healer = value
 end
 
 function BetterWype:ChatCommand(input)
@@ -125,7 +143,7 @@ end
 
 --Function got on Re:Keys addon sourcecode (thanks AcidWeb)
 function BetterWype:GetKeyInfo()
-	local keyLink = ""
+	local keyLink = "No Keys found"
 	for bag = 0, NUM_BAG_SLOTS do
 		local bagSlots = GetContainerNumSlots(bag)
 		for slot = 1, bagSlots do
