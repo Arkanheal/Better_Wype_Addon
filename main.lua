@@ -129,7 +129,7 @@ function BetterWype:GetKeyInfo()
 	for bag = 0, NUM_BAG_SLOTS do
 		local bagSlots = GetContainerNumSlots(bag)
 		for slot = 1, bagSlots do
-			if GetContainerItemID(bag, slot) == 158923 then
+			if GetContainerItemID(bag, slot) == 138019 then
 				keyLink = GetContainerItemLink(bag, slot)
 				break
 			end
