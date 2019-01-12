@@ -7,11 +7,18 @@ local options = {
 	args = {
 		msg = {
 			type = "input",
-			name = "Key"	,
+			name = "Key",
 			desc = "Press a random key and press [OK]",
 			usage = "<Your message>",
 			get = "GetMessage",
 			set = "SetMessage",
+		},
+		inscription = {
+			type = "toggle",
+			name = "Inscription",
+			desc = "When checked means you're in for some mythic pluses",
+			get = "GetInscri",
+			set = "SetInscri",
 		},
 		rolegroupe = {
 			type = "group",
@@ -52,11 +59,11 @@ local classMail = { 3, 7}
 local classLeather = { 4, 10, 11, 12 }
 local classCloth = { 5, 8, 9}
 
+
 local defaults = {
 	profile = {
 		message = "No Key atm",
-		showInChat = false,
-		showOnScreen = true,
+		inscri = false,
 		tank = false,
 		dpscast = false,
 		dpsmelee = false,
@@ -98,6 +105,13 @@ function BetterWype:SetMessage(info)
 	self.db.profile.message = BetterWype:GetKeyInfo()
 end
 
+function BetterWype:GetInscri(info)
+	return self.db.profile.inscri
+end
+
+function BetterWype:SetInscri(info, value)
+	self.db.profile.inscri = value
+end
 function BetterWype:IsTank(info)
 	return self.db.profile.tank
 end
